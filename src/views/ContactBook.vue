@@ -1,7 +1,7 @@
 <template>
     <div class="page row">
         <div class="col-md-10">
-            <InputSearch v-model="searchText" />
+            <input-search v-model="searchText" />
         </div>
             
         <div class="mt-3 col-md-6">
@@ -41,17 +41,28 @@
                     Chi tiết Liên hệ
                     <i class="fas fa-address-card"></i>
                 </h4>
+
                 <ContactCard :contact="activeContact" />
+
+                <router-link
+                    :to="{
+                        name: 'contact.edit',
+                        params: { id: activeContact._id },
+                    }"
+                >
+                    <span class="mt-2 badge badge-warning">
+                    <i class="fas fa-edit"></i> Hiệu chỉnh</span>
+                </router-link>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import ContactCard from "@/components/ContactCard.vue";
-import InputSearch from "@/components/InputSearch.vue";
-import ContactList from "@/components/ContactList.vue";
-import ContactService from "@/services/contact.service";
+import ContactCard from "../components/ContactCard.vue";
+import InputSearch from "../components/InputSearch.vue";
+import ContactList from "../components/ContactList.vue";
+import ContactService from "../services/contact.service";
 
 export default {
     components: {
@@ -80,13 +91,13 @@ export default {
         },
         filteredContacts() {
             if (!this.searchText) return this.contacts;
-                return this.contacts.filter((_contact, index) =>
+            return this.contacts.filter((_contact, index) =>
                 this.contactStrings[index].includes(this.searchText)
             );
         },
         activeContact() {
             if (this.activeIndex < 0) return null;
-                return this.filteredContacts[this.activeIndex];
+            return this.filteredContacts[this.activeIndex];
         },
         filteredContactsCount() {
             return this.filteredContacts.length;
@@ -116,7 +127,7 @@ export default {
         },
         goToAddContact() {
             this.$router.push({ name: "contact.add" });
-        },
+        }, 
     },
     mounted() {
         this.refreshList();
